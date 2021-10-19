@@ -1984,6 +1984,14 @@ typedef struct AVCodecContext {
     int export_side_data;
 
     /**
+     * - forbid the fallback to software path in ff_get_format
+     * - when the hardware init fails. (0 -> disabled)
+     * - encoding: unused.
+     * - decoding: Set by user.
+     */
+    int fallback_forbid;
+
+    /**
      * This callback is called at the beginning of each packet to get a data
      * buffer for it.
      *

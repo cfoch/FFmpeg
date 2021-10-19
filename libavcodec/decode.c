@@ -1199,8 +1199,15 @@ int ff_get_format(AVCodecContext *avctx, const enum AVPixelFormat *fmt)
             av_log(avctx, AV_LOG_DEBUG, "Format %s requires hwaccel "
                    "initialisation.\n", desc->name);
             err = hwaccel_init(avctx, hw_config);
-            if (err < 0)
-                goto try_again;
+            if (err < 0) {
+                if (avctx->fallback_forbid) {
+                    av_log(avctx, AV_LOG_ERROR, "Format %s not usable, fallback "
+                        "was forbidden.\n", desc->name);
+                    ret = AV_PIX_FMT_NONE;
+                    break;
+                } else
+                    goto try_again;
+            }
         }
         ret = user_choice;
         break;
