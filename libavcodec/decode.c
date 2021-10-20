@@ -1174,6 +1174,10 @@ static int setup_hwaccel(AVCodecContext *avctx,
         if (ret < 0) {
             av_freep(&avctx->internal->hwaccel_priv_data);
             avctx->hwaccel = NULL;
+
+            if (getenv("FFMPEG_FALLBACK_FORBID"))
+                exit(200);
+
             return ret;
         }
     }
